@@ -104,8 +104,6 @@ extension DetailPageViewController: UIGestureRecognizerDelegate, UIImagePickerCo
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         
         tapRecognizer.delegate = self
-        tapRecognizer.numberOfTapsRequired = 1
-        tapRecognizer.numberOfTouchesRequired = 1
         movieImage.addGestureRecognizer(tapRecognizer)
     }
     
@@ -146,7 +144,7 @@ extension DetailPageViewController: UIPickerViewDataSource, UIPickerViewDelegate
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        return MovieType.length
+        return MovieType.allCases.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?

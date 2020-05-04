@@ -28,11 +28,6 @@ enum MovieType: String, CaseIterable
     case Horror = "Horror"
     case Comedy = "Comedy"
     case Others = "Others"
-    
-    static var length: Int
-    {
-        return 5
-    }
 }
 
 
