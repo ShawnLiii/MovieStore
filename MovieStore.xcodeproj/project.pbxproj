@@ -9,21 +9,27 @@
 /* Begin PBXBuildFile section */
 		3D8E6472245F54440058BB1F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E6471245F54440058BB1F /* AppDelegate.swift */; };
 		3D8E6474245F54440058BB1F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E6473245F54440058BB1F /* SceneDelegate.swift */; };
-		3D8E6476245F54440058BB1F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E6475245F54440058BB1F /* ViewController.swift */; };
 		3D8E6479245F54440058BB1F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D8E6477245F54440058BB1F /* Main.storyboard */; };
 		3D8E647B245F54450058BB1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D8E647A245F54450058BB1F /* Assets.xcassets */; };
 		3D8E647E245F54450058BB1F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D8E647C245F54450058BB1F /* LaunchScreen.storyboard */; };
+		3D8E6488245F54D10058BB1F /* MovieStoreDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E6487245F54D10058BB1F /* MovieStoreDS.swift */; };
+		3D8E648B245F64680058BB1F /* MainPageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E648A245F64680058BB1F /* MainPageTableViewController.swift */; };
+		3D8E648D245F64900058BB1F /* DetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E648C245F64900058BB1F /* DetailPageViewController.swift */; };
+		3D8E648F245F64AE0058BB1F /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8E648E245F64AE0058BB1F /* MovieTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3D8E646E245F54440058BB1F /* MovieStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D8E6471245F54440058BB1F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D8E6473245F54440058BB1F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		3D8E6475245F54440058BB1F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3D8E6478245F54440058BB1F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3D8E647A245F54450058BB1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D8E647D245F54450058BB1F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D8E647F245F54450058BB1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D8E6487245F54D10058BB1F /* MovieStoreDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieStoreDS.swift; sourceTree = "<group>"; };
+		3D8E648A245F64680058BB1F /* MainPageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageTableViewController.swift; sourceTree = "<group>"; };
+		3D8E648C245F64900058BB1F /* DetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewController.swift; sourceTree = "<group>"; };
+		3D8E648E245F64AE0058BB1F /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +62,42 @@
 		3D8E6470245F54440058BB1F /* MovieStore */ = {
 			isa = PBXGroup;
 			children = (
-				3D8E6471245F54440058BB1F /* AppDelegate.swift */,
-				3D8E6473245F54440058BB1F /* SceneDelegate.swift */,
-				3D8E6475245F54440058BB1F /* ViewController.swift */,
-				3D8E6477245F54440058BB1F /* Main.storyboard */,
+				3D8E6489245F54D60058BB1F /* Model */,
+				3D8E6486245F54B90058BB1F /* View */,
+				3D8E6485245F54A10058BB1F /* Controller */,
 				3D8E647A245F54450058BB1F /* Assets.xcassets */,
-				3D8E647C245F54450058BB1F /* LaunchScreen.storyboard */,
 				3D8E647F245F54450058BB1F /* Info.plist */,
 			);
 			path = MovieStore;
+			sourceTree = "<group>";
+		};
+		3D8E6485245F54A10058BB1F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3D8E6471245F54440058BB1F /* AppDelegate.swift */,
+				3D8E6473245F54440058BB1F /* SceneDelegate.swift */,
+				3D8E648A245F64680058BB1F /* MainPageTableViewController.swift */,
+				3D8E648C245F64900058BB1F /* DetailPageViewController.swift */,
+				3D8E648E245F64AE0058BB1F /* MovieTableViewCell.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3D8E6486245F54B90058BB1F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3D8E6477245F54440058BB1F /* Main.storyboard */,
+				3D8E647C245F54450058BB1F /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3D8E6489245F54D60058BB1F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3D8E6487245F54D10058BB1F /* MovieStoreDS.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,8 +171,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D8E6476245F54440058BB1F /* ViewController.swift in Sources */,
+				3D8E648D245F64900058BB1F /* DetailPageViewController.swift in Sources */,
+				3D8E6488245F54D10058BB1F /* MovieStoreDS.swift in Sources */,
+				3D8E648F245F64AE0058BB1F /* MovieTableViewCell.swift in Sources */,
 				3D8E6472245F54440058BB1F /* AppDelegate.swift in Sources */,
+				3D8E648B245F64680058BB1F /* MainPageTableViewController.swift in Sources */,
 				3D8E6474245F54440058BB1F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
