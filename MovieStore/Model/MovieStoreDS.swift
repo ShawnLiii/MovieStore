@@ -8,7 +8,8 @@
 
 import UIKit
 
-protocol ManageMovieDelegate {
+protocol ManageMovieDelegate
+{
     func addMovie (movieName: String, movieType: MovieType, movieDetail: String, movieImage: UIImage)
     func editMovie (movieName: String, movieType: MovieType, movieDetail: String, movieImage: UIImage)
 }
@@ -20,14 +21,16 @@ struct MovieStoreDS
     var moviePosterURL: UIImage
 }
 
-enum MovieType: String, CaseIterable {
+enum MovieType: String, CaseIterable
+{
     case Action = "Action"
     case ScienceFiction = "Science Fiction"
     case Horror = "Horror"
     case Comedy = "Comedy"
     case Others = "Others"
     
-    static var length: Int {
+    static var length: Int
+    {
         return 5
     }
 }

@@ -8,7 +8,8 @@
 
 import UIKit
 
-class MainPageTableViewController: UITableViewController {
+class MainPageTableViewController: UITableViewController
+{
     
     var movies = moviesDataScource
    
@@ -18,7 +19,6 @@ class MainPageTableViewController: UITableViewController {
     
     @IBOutlet weak var trashBtnOutlet: UIBarButtonItem!
    
-    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -40,29 +40,34 @@ class MainPageTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return movies[section].count
     }
+    
     //MARK: - Header Setting
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
     {
         let headerView = UILabel()
+        
         headerView.text = movies[section][0].movieType.rawValue
         headerView.font = UIFont.systemFont(ofSize: 30)
         headerView.textColor = UIColor.black
         headerView.backgroundColor = UIColor.gray.withAlphaComponent(0.33)
         headerView.sizeToFit()
+        
         return headerView
     }
     
     // MARK: - Cell Configuration
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "movie", for: indexPath) as! MovieTableViewCell
+        
         let movieIndexPath = movies[indexPath.section][indexPath.row]
+        
         cell.movieName.text = movieIndexPath.movieName
         cell.movieType.text = movieIndexPath.movieType.rawValue
         cell.movieImage.image = movieIndexPath.moviePosterURL
-        // Configure the cell...
-
+        
         return cell
     }
   
@@ -86,8 +91,15 @@ class MainPageTableViewController: UITableViewController {
     {
         if editingStyle == .delete
         {
-            movies[indexPath.section].remove(at: indexPath.row)
-            tableView.reloadData()
+            if movies[indexPath.section].count > 1
+            {
+                movies[indexPath.section].remove(at: indexPath.row)
+                tableView.reloadData()
+            }
+            else
+            {
+                alert()
+            }
         }
     }
     
@@ -104,8 +116,8 @@ class MainPageTableViewController: UITableViewController {
         {
             trashBtnOutlet.isEnabled = false
         }
-        
     }
+    
     // Batch Delete
     @IBAction func trashBtn(_ sender: UIBarButtonItem)
     {
@@ -113,55 +125,76 @@ class MainPageTableViewController: UITableViewController {
         {
             for indexPath in indexPaths.reversed()
             {
-                movies[indexPath.section].remove(at: indexPath.row)
+                if movies[indexPath.section].count > 1
+                {
+                    movies[indexPath.section].remove(at: indexPath.row)
+                }
+                else
+                {
+                    alert()
+                    break
+                }
             }
             
             tableView.reloadData()
         }
     }
+    
     //MARK: - Arrange Operation
+    
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath)
     {
-        var movie = movies[fromIndexPath.section][fromIndexPath.row]
-        movies[fromIndexPath.section].remove(at: fromIndexPath.row)
-        
-        // move from one section to another section
-        if to.section != fromIndexPath.section
+        if movies[fromIndexPath.section].count > 1
         {
-            switch to.section
-            {
-            case 0:
-                movie.movieType = .Action
-            case 1:
-                movie.movieType = .ScienceFiction
-            case 2:
-                movie.movieType = .Horror
-            case 3:
-                movie.movieType = .Comedy
-            default:
-                movie.movieType = .Others
-            }
+            var movie = movies[fromIndexPath.section][fromIndexPath.row]
             
-            movies[to.section].insert(movie, at: to.row)
-            //        Update View
-            tableView.reloadData()
+            movies[fromIndexPath.section].remove(at: fromIndexPath.row)
+            
+            // move from one section to another section
+            if to.section != fromIndexPath.section
+            {
+                switch to.section
+                {
+                    case 0:
+                        movie.movieType = .Action
+                    case 1:
+                        movie.movieType = .ScienceFiction
+                    case 2:
+                        movie.movieType = .Horror
+                    case 3:
+                        movie.movieType = .Comedy
+                    default:
+                        movie.movieType = .Others
+                }
+                
+                movies[to.section].insert(movie, at: to.row)
+                //        Update View
+                tableView.reloadData()
+            }
+            else
+            {
+                movies[fromIndexPath.section].insert(movie, at: to.row)
+            }
         }
         else
         {
-            movies[fromIndexPath.section].insert(movie, at: to.row)
-            //        Update View
-            tableView.reloadData()
+            alert()
         }
+        
+        //        Update View
+        tableView.reloadData()
     }
 }
+
 // MARK: - Passing Value, Add or Edit
+
 extension MainPageTableViewController: ManageMovieDelegate
 {
     // Forward Passing
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        
         let vc = segue.destination as! DetailPageViewController
+        
         vc.delegate = self
         
         if segue.identifier == "editSegue"
@@ -178,24 +211,26 @@ extension MainPageTableViewController: ManageMovieDelegate
     }
     
     // Backward Passing
-    
     func addMovie(movieName: String, movieType: MovieType, movieDetail: String, movieImage: UIImage)
     {
         let movie = MovieStoreDS(movieName: movieName, movieType: movieType, movieDetail: movieDetail, moviePosterURL: movieImage)
+        
         var sectionToAdd = 0
+        
         switch movieType
         {
-        case .Action:
-            sectionToAdd = 0
-        case .ScienceFiction:
-            sectionToAdd = 1
-        case .Horror:
-            sectionToAdd = 2
-        case .Comedy:
-            sectionToAdd = 3
-        default:
-            sectionToAdd = 4
+            case .Action:
+                sectionToAdd = 0
+            case .ScienceFiction:
+                sectionToAdd = 1
+            case .Horror:
+                sectionToAdd = 2
+            case .Comedy:
+                sectionToAdd = 3
+            default:
+                sectionToAdd = 4
         }
+        
         movies[sectionToAdd].append(movie)
         tableView.reloadData()
     }
@@ -212,15 +247,34 @@ extension MainPageTableViewController: ManageMovieDelegate
             movieIndex.moviePosterURL = movieImage
             // Update View
             let indexPath = IndexPath(row: row, section: section)
+            
             let cell = tableView.cellForRow(at: indexPath) as! MovieTableViewCell
+            
             cell.movieName.text = movieName
             cell.movieType.text = movieType.rawValue
             cell.movieImage.image = movieImage
         }
         else
         {
-            movies[section].remove(at: row)
-            addMovie(movieName: movieName, movieType: movieType, movieDetail: movieDetail, movieImage: movieImage)
+            if movies[section].count > 1
+            {
+               movies[section].remove(at: row)
+               addMovie(movieName: movieName, movieType: movieType, movieDetail: movieDetail, movieImage: movieImage)
+            }
+            else
+            {
+                alert()
+            }
         }
+    }
+    
+    func alert()
+    {
+        let alertController = UIAlertController(title: "Warning", message: "Each Section has to have at least one Movie", preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "Ok", style: .default)
+        
+        alertController.addAction(confirmAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }

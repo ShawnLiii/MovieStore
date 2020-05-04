@@ -11,7 +11,6 @@ import UIKit
 class DetailPageViewController: UIViewController
 {
 
-    
     @IBOutlet weak var movieImage: UIImageView!
     
     @IBOutlet weak var movieName: UITextField!
@@ -51,6 +50,7 @@ class DetailPageViewController: UIViewController
         movieDetail.text = detail
         movieType.text = type?.rawValue
         movieImage.image = image
+        
         if name != nil
         {
             navigationItem.title = "Edit Movie"
@@ -66,16 +66,16 @@ class DetailPageViewController: UIViewController
             
             switch type
             {
-            case MovieType.Action.rawValue:
-                movieType = .Action
-            case MovieType.Comedy.rawValue:
-                movieType = .Comedy
-            case MovieType.Horror.rawValue:
-                movieType = .Horror
-            case MovieType.ScienceFiction.rawValue:
-                movieType = .ScienceFiction
-            default:
-                movieType = .Others
+                case MovieType.Action.rawValue:
+                    movieType = .Action
+                case MovieType.Comedy.rawValue:
+                    movieType = .Comedy
+                case MovieType.Horror.rawValue:
+                    movieType = .Horror
+                case MovieType.ScienceFiction.rawValue:
+                    movieType = .ScienceFiction
+                default:
+                    movieType = .Others
             }
             
             if self.name != nil
@@ -90,17 +90,19 @@ class DetailPageViewController: UIViewController
             navigationController?.popViewController(animated: true)
         }
     }
-
 }
 
 // MARK: - Image Picker and Guesture
+
 extension DetailPageViewController: UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     func setupGestureAndImagePickerForImage()
     {
         imagePickerCtrl.allowsEditing = true
         movieImage.isUserInteractionEnabled = true
+        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        
         tapRecognizer.delegate = self
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.numberOfTouchesRequired = 1
@@ -117,6 +119,7 @@ extension DetailPageViewController: UIGestureRecognizerDelegate, UIImagePickerCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
     {
         guard let image = info[.editedImage] as? UIImage else {return}
+        
         movieImage.image = image
         imagePickerCtrl.delegate = nil
         self.dismiss(animated: true, completion: nil)
@@ -136,20 +139,24 @@ extension DetailPageViewController: UIPickerViewDataSource, UIPickerViewDelegate
         movieName.delegate = self
     }
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int
+    {
         return 1
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    {
         return MovieType.length
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
+    {
         
         return typeList[row].rawValue
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
         
         movieType.text = typeList[row].rawValue
         typePickerView.isHidden = true
@@ -167,8 +174,8 @@ extension DetailPageViewController: UIPickerViewDataSource, UIPickerViewDelegate
         return true
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
         movieName.resignFirstResponder()
         
         return true
@@ -177,6 +184,7 @@ extension DetailPageViewController: UIPickerViewDataSource, UIPickerViewDelegate
 }
 
 // MARK: - Text View Configuration
+
 extension DetailPageViewController: UITextViewDelegate
 {
     func setupMovieDetailTextView()
@@ -192,6 +200,7 @@ extension DetailPageViewController: UITextViewDelegate
             
             return false
         }
+        
         return true
     }
 }
