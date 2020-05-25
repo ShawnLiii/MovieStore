@@ -10,35 +10,69 @@ import UIKit
 
 class MainPageTableViewController: UITableViewController
 {
-    
     var movies = moviesDataScource
-   
+    var moviesWithoutSec: [MovieStoreDS]
+    {
+        var movieContainer = [MovieStoreDS]()
+        for sectionMovies in movies
+        {
+            for movie in sectionMovies
+            {
+                movieContainer.append(movie)
+            }
+        }
+        return movieContainer
+    }
     var row = 0
-    
+    var filteredRow = 0
     var section = 0
+    let searchController = UISearchController(searchResultsController: nil) //use the same view you’re searching to display the results
+    var filteredMovies: [MovieStoreDS] = []
+    var isSearchBarEmpty: Bool {
+      return searchController.searchBar.text?.isEmpty ?? true
+    }
+    var isFiltering: Bool {
+      return searchController.isActive && !isSearchBarEmpty
+    }
     
     @IBOutlet weak var trashBtnOutlet: UIBarButtonItem!
-   
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         trashBtnOutlet.isEnabled = false
         tableView.allowsMultipleSelectionDuringEditing = true
+        setupSearchBar()
     }
-
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int
     {
         // #warning Incomplete implementation, return the number of sections
-        return movies.count
+        if isFiltering
+        {
+            return 1
+        }
+        else
+        {
+            return movies.count
+        }
+        
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-        return movies[section].count
+        if isFiltering
+        {
+            return filteredMovies.count
+        }
+        else
+        {
+            return movies[section].count
+        }
     }
     
     //MARK: - Header Setting
@@ -61,8 +95,16 @@ class MainPageTableViewController: UITableViewController
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "movie", for: indexPath) as! MovieTableViewCell
+        let movieIndexPath:MovieStoreDS
         
-        let movieIndexPath = movies[indexPath.section][indexPath.row]
+        if isFiltering
+        {
+            movieIndexPath = filteredMovies[indexPath.row]
+        }
+        else
+        {
+            movieIndexPath = movies[indexPath.section][indexPath.row]
+        }
         
         cell.movieName.text = movieIndexPath.movieName
         cell.movieType.text = movieIndexPath.movieType.rawValue
@@ -194,20 +236,34 @@ extension MainPageTableViewController: ManageMovieDelegate
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         let vc = segue.destination as! DetailPageViewController
-        
+
         vc.delegate = self
         
-        if segue.identifier == "editSegue"
+        if isFiltering
         {
             let cell = sender as! MovieTableViewCell
-            row = tableView.indexPath(for: cell)!.row
-            section = tableView.indexPath(for: cell)!.section
-            let movieIndexPath = movies[section][row]
+            filteredRow = tableView.indexPath(for: cell)!.row
+            let movieIndexPath = filteredMovies[filteredRow]
             vc.name = movieIndexPath.movieName
             vc.type = movieIndexPath.movieType
             vc.image = movieIndexPath.moviePosterURL
             vc.detail = movieIndexPath.movieDetail
         }
+        else
+        {
+            if segue.identifier == "editSegue"
+            {
+                let cell = sender as! MovieTableViewCell
+                row = tableView.indexPath(for: cell)!.row
+                section = tableView.indexPath(for: cell)!.section
+                let movieIndexPath = movies[section][row]
+                vc.name = movieIndexPath.movieName
+                vc.type = movieIndexPath.movieType
+                vc.image = movieIndexPath.moviePosterURL
+                vc.detail = movieIndexPath.movieDetail
+            }
+        }
+
     }
     
     // Backward Passing
@@ -237,35 +293,43 @@ extension MainPageTableViewController: ManageMovieDelegate
     
     func editMovie(movieName: String, movieType: MovieType, movieDetail: String, movieImage: UIImage)
     {
-        var movieIndex = movies[section][row]
-        
-        if movieIndex.movieType == movieType
+        //MARK: - 1. assign value doesn't work fine
+//        var movieIndex = movies[section][row]
+        if isFiltering
         {
-            movieIndex.movieName = movieName
-            movieIndex.movieType = movieType
-            movieIndex.movieDetail = movieDetail
-            movieIndex.moviePosterURL = movieImage
-            // Update View
-            let indexPath = IndexPath(row: row, section: section)
+        //MARK: - Unsolved Problem. 2. After Filtering, can't edit Movie. How can I fetch the index
             
-            let cell = tableView.cellForRow(at: indexPath) as! MovieTableViewCell
-            
-            cell.movieName.text = movieName
-            cell.movieType.text = movieType.rawValue
-            cell.movieImage.image = movieImage
         }
         else
         {
-            if movies[section].count > 1
+            if movies[section][row].movieType == movieType
             {
-               movies[section].remove(at: row)
-               addMovie(movieName: movieName, movieType: movieType, movieDetail: movieDetail, movieImage: movieImage)
+                movies[section][row].movieName = movieName
+                movies[section][row].movieType = movieType
+                movies[section][row].movieDetail = movieDetail
+                movies[section][row].moviePosterURL = movieImage
+                // Update View
+                let indexPath = IndexPath(row: row, section: section)
+                let cell = tableView.cellForRow(at: indexPath) as! MovieTableViewCell
+
+                cell.movieName.text = movieName
+                cell.movieType.text = movieType.rawValue
+                cell.movieImage.image = movieImage
             }
             else
             {
-                alert()
+                if movies[section].count > 1
+                {
+                    movies[section].remove(at: row)
+                    addMovie(movieName: movieName, movieType: movieType, movieDetail: movieDetail, movieImage: movieImage)
+                }
+                else
+                {
+                    alert()
+                }
             }
         }
+        
     }
     
     func alert()
@@ -277,4 +341,38 @@ extension MainPageTableViewController: ManageMovieDelegate
         alertController.addAction(confirmAction)
         self.present(alertController, animated: true, completion: nil)
     }
+}
+
+// MARK: - Search Bar Configuration
+
+extension MainPageTableViewController: UISearchBarDelegate, UISearchResultsUpdating
+{
+    func setupSearchBar()
+    {
+        //updating the content of the searchResultsController
+        searchController.searchResultsUpdater = self
+        //By default, UISearchController obscures the view controller containing the information you’re searching. This is useful if you’re using another view controller for your searchResultsController. In this instance, you’ve set the current view to show the results, so you don’t want to obscure your view.
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Movies"
+        navigationItem.searchController = searchController
+        //the search bar doesn’t remain on the screen if the user navigates to another view controller while the UISearchController is active.
+        definesPresentationContext = true
+        
+    }
+    
+    func updateSearchResults(for searchController: UISearchController)
+    {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text!)
+
+    }
+    
+    func filterContentForSearchText(_ searchText: String)
+    {
+        filteredMovies = moviesWithoutSec.filter{   (movie: MovieStoreDS) -> Bool in
+            return movie.movieName.lowercased().contains(searchText.lowercased())
+        }
+      tableView.reloadData()
+    }
+   
 }

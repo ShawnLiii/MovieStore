@@ -32,16 +32,20 @@ enum MovieType: String, CaseIterable
 
 
 
-let moviesDataScource: [[MovieStoreDS]] =
+var moviesDataScource: [[MovieStoreDS]] =
     [
         [
             MovieStoreDS(movieName: "Extraction", movieType: .Action, movieDetail: "", moviePosterURL: UIImage(named: "EXTRACTION")!),
-            MovieStoreDS(movieName: "Bad Boys For Life", movieType: .Action, movieDetail: "", moviePosterURL: UIImage(named:"BADBOYSFORLIFE")!)
+            MovieStoreDS(movieName: "Bad Boys For Life", movieType: .Action, movieDetail: "", moviePosterURL: UIImage(named:"BADBOYSFORLIFE")!),
+            MovieStoreDS(movieName: "Upgrade", movieType: .Action, movieDetail: "", moviePosterURL: UIImage(named:"UPGRADE")!),
+            MovieStoreDS(movieName: "Now You See Me 2", movieType: .Action, movieDetail: "", moviePosterURL: UIImage(named:"NOWYOUSEEME2")!)
         ],
         
         [
             MovieStoreDS(movieName: "DeadPool 2", movieType: .ScienceFiction, movieDetail: "", moviePosterURL: UIImage(named: "DEADPOOL2")!),
-            MovieStoreDS(movieName: "The Avengers 4", movieType: .ScienceFiction, movieDetail: "",  moviePosterURL: UIImage(named:"AVENGERS4")!)
+            MovieStoreDS(movieName: "The Avengers 4", movieType: .ScienceFiction, movieDetail: "",  moviePosterURL: UIImage(named:"AVENGERS4")!),
+            MovieStoreDS(movieName: "Men In Black - International", movieType: .ScienceFiction, movieDetail: "",  moviePosterURL: UIImage(named:"MENINBLACK")!),
+            MovieStoreDS(movieName: "Star Wars 9", movieType: .ScienceFiction, movieDetail: "",  moviePosterURL: UIImage(named:"STARWARS9")!)
         ],
         
         [
